@@ -45,6 +45,7 @@ const d_text = document.getElementById('d_text');
 const submitBtn = document.getElementById('submit');
 
 let currentQuiz = 0;
+let score = 0;
 
 loadQuiz();
 
@@ -58,14 +59,35 @@ function loadQuiz() {
     d_text.innerText = currentQuizData.d;
 }
 
+function getSelected() {
+    const answerEls = document.querySelectorAll("answer");
+
+    let answer = undefined;
+
+    answerEls.forEach((answerEl) => {
+        if(answerEl.checked) {
+            answer = answerEl.id;
+        }
+    });
+
+    return answer;
+}
+
 submitBtn.addEventListener('click', () => {
-    currentQuiz++;
+    // check to see the answer
+    const answer = getSelected();
 
-    if(currentQuiz < quizData.length) {
-        loadQuiz();
-    } else {
-        // TODO: Show results
-        alert('You finished! Get yourself an Orange Lemonade');
+    if(answer){
+        if(answer === quizData[currentQuiz].correct) {
+            score++;
+        }
+        
+        currentQuiz++;
+        if(currentQuiz < quizData.length) {
+            loadQuiz();
+        } else {
+            // TODO: Show results
+            alert('You finished! Get yourself an Orange Lemonade');
+        }
     }
-
-})
+});
